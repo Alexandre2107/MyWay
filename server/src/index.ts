@@ -1,6 +1,6 @@
 const message = "hello world"
 const teste = () => {
-  console.log("ola")
+  console.log(message)
 }
 
 teste()
