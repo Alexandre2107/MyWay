@@ -12,3 +12,59 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Profile {
+  profile_id Int    @id @default(autoincrement())
+  description String
+  users       User[]
+
+  @@map("Profiles")
+}
+
+model User {
+  user_id    Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  password   String
+  profile_id Int
+  profile    Profile  @relation(fields: [profile_id], references: [profile_id])
+  routinesAsStudent   Routine[] @relation("StudentRoutines")
+  routinesAsSupervisor Routine[] @relation("SupervisorRoutines")
+
+  @@map("Users")
+}
+
+model Routine {
+  routine_id   Int       @id @default(autoincrement())
+  student_id   Int
+  supervisor_id Int
+  creation_date DateTime @default(now())
+  description  String?
+  student      User      @relation("StudentRoutines", fields: [student_id], references: [user_id])
+  supervisor   User      @relation("SupervisorRoutines", fields: [supervisor_id], references: [user_id])
+  activities   Activity[]
+
+  @@map("Routines")
+}
+
+model Activity {
+  activity_id Int     @id @default(autoincrement())
+  routine_id  Int
+  type        String
+  description String?
+  routine     Routine @relation(fields: [routine_id], references: [routine_id])
+  schedules   ActivitySchedule[]
+
+  @@map("Activities")
+}
+
+model ActivitySchedule {
+  activity_schedule_id Int    @id @default(autoincrement())
+  activity_id          Int
+  start_time           DateTime
+  end_time             DateTime
+  day_of_week          String
+  activity             Activity @relation(fields: [activity_id], references: [activity_id])
+
+  @@map("ActivitySchedules")
+}
