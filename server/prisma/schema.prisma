@@ -13,53 +13,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Profile {
-  profile_id Int    @id @default(autoincrement())
-  description String
-  users       User[]
-
-  @@map("Profiles")
-}
-
 model User {
-  user_id    Int      @id @default(autoincrement())
-  name       String
-  email      String   @unique
-  password   String
-  profile_id Int
-  profile    Profile  @relation(fields: [profile_id], references: [profile_id])
-  routinesAsStudent   Routine[] @relation("StudentRoutines")
-  routinesAsSupervisor Routine[] @relation("SupervisorRoutines")
+  user_id             Int       @id @default(autoincrement())
+  full_name           String
+  document            String    @unique
+  email               String    @unique
+  password            String
+  type_of_user        String
+  has_full_permission Boolean
+  routinesAsUser      Routine[] @relation("UserRoutines")
+  routinesAsGuardian  Routine[] @relation("GuardianRoutines")
 
   @@map("Users")
 }
 
 model Routine {
-  routine_id   Int       @id @default(autoincrement())
-  student_id   Int
-  supervisor_id Int
-  creation_date DateTime @default(now())
-  description  String?
-  student      User      @relation("StudentRoutines", fields: [student_id], references: [user_id])
-  supervisor   User      @relation("SupervisorRoutines", fields: [supervisor_id], references: [user_id])
-  activities   Activity[]
+  routine_id    Int        @id @default(autoincrement())
+  user_id       Int
+  guardian_id   Int
+  creation_date DateTime   @default(now())
+  description   String?
+  user          User       @relation("UserRoutines", fields: [user_id], references: [user_id])
+  guardian      User       @relation("GuardianRoutines", fields: [guardian_id], references: [user_id])
+  activities    Activity[]
 
   @@map("Routines")
 }
 
 model Activity {
-  activity_id Int     @id @default(autoincrement())
+  activity_id Int                @id @default(autoincrement())
   routine_id  Int
   type        String
   description String?
-  routine     Routine @relation(fields: [routine_id], references: [routine_id])
+  routine     Routine            @relation(fields: [routine_id], references: [routine_id])
   schedules   ActivitySchedule[]
 
   @@map("Activities")
 }
 
 model ActivitySchedule {
-  activity_schedule_id Int    @id @default(autoincrement())
+  activity_schedule_id Int      @id @default(autoincrement())
   activity_id          Int
   start_time           DateTime
   end_time             DateTime
