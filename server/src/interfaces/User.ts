@@ -1,24 +1,28 @@
-import { Profile } from "./Profile"
-
 export interface User {
   user_id: number
-  name: string
+  full_name: string
+  document: string
   email: string
   password: string
-  profile: Profile
+  type_of_user: string
+  has_full_permission: boolean
 }
 
 export interface CreateUserInput {
-  name: string
+  full_name: string
+  document: string
   email: string
   password: string
-  profile_id: number
+  type_of_user: string
+  has_full_permission: boolean
 }
 
 export interface UpdateUserInput {
   user_id: number
-  name?: string
+  full_name?: string
+  document?: string
   email?: string
   password?: string
-  profile_id?: number
+  type_of_user?: string
+  has_full_permission?: boolean
 }
