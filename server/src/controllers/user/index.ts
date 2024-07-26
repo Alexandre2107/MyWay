@@ -17,10 +17,10 @@ export const getUserById = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params
+  const { user_id } = req.params
   try {
-    const user = await prisma.user.findUnique({
-      where: { user_id: Number(id) },
+    const user: User | null = await prisma.user.findUnique({
+      where: { user_id: Number(user_id) },
     })
     if (user) {
       res.status(200).json(user)
@@ -46,7 +46,7 @@ export const createUser = async (
     has_full_permission,
   } = req.body
   try {
-    const newUser = await prisma.user.create({
+    const newUser: User = await prisma.user.create({
       data: {
         full_name,
         document,
@@ -67,7 +67,7 @@ export const updateUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params
+  const { user_id } = req.params
   const {
     full_name,
     document,
@@ -77,8 +77,8 @@ export const updateUser = async (
     has_full_permission,
   } = req.body
   try {
-    const updatedUser = await prisma.user.update({
-      where: { user_id: Number(id) },
+    const updatedUser: User = await prisma.user.update({
+      where: { user_id: Number(user_id) },
       data: {
         full_name,
         document,
@@ -99,10 +99,10 @@ export const deleteUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params
+  const { user_id } = req.params
   try {
     await prisma.user.delete({
-      where: { user_id: Number(id) },
+      where: { user_id: Number(user_id) },
     })
     res.status(204).send()
   } catch (error) {
