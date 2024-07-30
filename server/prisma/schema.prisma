@@ -46,23 +46,25 @@ model Routine {
 }
 
 model Activity {
-  activity_id Int                @id @default(autoincrement())
-  routine_id  Int
-  type        String
-  description String?
-  routine     Routine            @relation(fields: [routine_id], references: [routine_id])
-  schedules   ActivitySchedule[]
+  activity_id   Int                @id @default(autoincrement())
+  routine_id    Int
+  title         String
+  description   String?
+  activity_type String
+  routine       Routine            @relation(fields: [routine_id], references: [routine_id])
+  schedules     ActivitySchedule[]
 
   @@map("Activities")
 }
 
 model ActivitySchedule {
-  activity_schedule_id Int      @id @default(autoincrement())
+  activity_schedule_id Int       @id @default(autoincrement())
   activity_id          Int
-  start_time           DateTime
-  end_time             DateTime
+  has_time             Boolean   @default(true)
+  start_time           DateTime?
+  end_time             DateTime?
   day_of_week          String
-  activity             Activity @relation(fields: [activity_id], references: [activity_id])
+  activity             Activity  @relation(fields: [activity_id], references: [activity_id])
 
   @@map("ActivitySchedules")
 }
