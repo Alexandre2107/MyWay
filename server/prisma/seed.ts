@@ -43,39 +43,43 @@ async function main() {
     },
   })
 
-  // Criação de atividades
+  // Criação de atividades com horário (scheduled)
   const activity1 = await prisma.activity.create({
     data: {
       routine_id: routine1.routine_id,
-      type: "study",
+      title: "Math Study Session",
       description: "Study session for math",
+      activity_type: "scheduled",
     },
   })
 
+  // Criação de atividades do tipo tarefa (task)
   const activity2 = await prisma.activity.create({
     data: {
       routine_id: routine2.routine_id,
-      type: "exercise",
+      title: "Morning Exercise",
       description: "Morning exercise routine",
+      activity_type: "task",
     },
   })
 
-  // Criação de horários de atividades
+  // Criação de horários de atividades (scheduled)
   await prisma.activitySchedule.create({
     data: {
       activity_id: activity1.activity_id,
+      has_time: true,
       start_time: new Date("2024-07-25T08:00:00Z"),
       end_time: new Date("2024-07-25T10:00:00Z"),
-      day_of_week: "Monday",
+      day_of_week: "Mon",
     },
   })
 
+  // Criação de horários de atividades (task)
   await prisma.activitySchedule.create({
     data: {
       activity_id: activity2.activity_id,
-      start_time: new Date("2024-07-26T06:00:00Z"),
-      end_time: new Date("2024-07-26T07:00:00Z"),
-      day_of_week: "Tuesday",
+      has_time: false,
+      day_of_week: "Tue",
     },
   })
 }

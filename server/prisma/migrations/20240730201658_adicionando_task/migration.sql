@@ -24,8 +24,9 @@ CREATE TABLE "Routines" (
 CREATE TABLE "Activities" (
     "activity_id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "routine_id" INTEGER NOT NULL,
-    "type" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
     "description" TEXT,
+    "activity_type" TEXT NOT NULL,
     CONSTRAINT "Activities_routine_id_fkey" FOREIGN KEY ("routine_id") REFERENCES "Routines" ("routine_id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -33,8 +34,9 @@ CREATE TABLE "Activities" (
 CREATE TABLE "ActivitySchedules" (
     "activity_schedule_id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "activity_id" INTEGER NOT NULL,
-    "start_time" DATETIME NOT NULL,
-    "end_time" DATETIME NOT NULL,
+    "has_time" BOOLEAN NOT NULL DEFAULT true,
+    "start_time" DATETIME,
+    "end_time" DATETIME,
     "day_of_week" TEXT NOT NULL,
     CONSTRAINT "ActivitySchedules_activity_id_fkey" FOREIGN KEY ("activity_id") REFERENCES "Activities" ("activity_id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
