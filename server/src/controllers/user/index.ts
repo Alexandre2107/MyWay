@@ -32,6 +32,36 @@ export const getUserById = async (
   }
 }
 
+// Get user by Email or Document
+export const getUserByEmailOrDocument = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { identifier } = req.params
+
+  try {
+    let whereClause: any = {}
+
+    if (identifier.includes("@")) {
+      whereClause.email = identifier
+    }else {
+      whereClause.document = identifier
+    }
+
+    const user: User | null = await prisma.user.findUnique({
+      where: whereClause,
+    })
+
+    if (user) {
+      res.status(200).json(user)
+    } else {
+      res.status(404).json({ message: "User not found" })
+    }
+  } catch (error) {
+    res.status(500).json({ error: error })
+  }
+}
+
 // Create new user
 export const createUser = async (
   req: Request,
