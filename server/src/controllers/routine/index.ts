@@ -124,7 +124,7 @@ export const createRoutine = async (
         res.status(200).json(newRoutine)
       }
     } else {
-      throw new Error("The user already has a routine.")
+      res.status(500).json({ error: "The user already has a routine." })
     }
   } catch (error) {
     res.status(500).json({ error: error })

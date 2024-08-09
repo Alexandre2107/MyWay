@@ -3,15 +3,15 @@ import { User } from "./User"
 export interface Routine {
   routine_id: number
   user: User
-  guardian: User
+  guardian: User | null
   creation_date: Date
-  description: string | null
+  description?: string | null
 }
 
 export interface CreateRoutineInput {
   user_id: number
   guardian_id: number
-  description: string
+  description?: string
 }
 
 export interface UpdateRoutineInput {
