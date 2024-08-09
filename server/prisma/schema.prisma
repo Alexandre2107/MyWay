@@ -35,11 +35,11 @@ model User {
 model Routine {
   routine_id    Int        @id @default(autoincrement())
   user_id       Int
-  guardian_id   Int
+  guardian_id   Int?
   creation_date DateTime   @default(now())
   description   String?
   user          User       @relation("UserRoutines", fields: [user_id], references: [user_id])
-  guardian      User       @relation("GuardianRoutines", fields: [guardian_id], references: [user_id])
+  guardian      User?      @relation("GuardianRoutines", fields: [guardian_id], references: [user_id])
   activities    Activity[]
 
   @@map("Routines")
@@ -51,7 +51,7 @@ model Activity {
   title         String
   description   String?
   activity_type String
-  routine       Routine            @relation(fields: [routine_id], references: [routine_id])
+  routine       Routine            @relation(fields: [routine_id], references: [routine_id], onDelete: Cascade)
   schedules     ActivitySchedule[]
 
   @@map("Activities")
@@ -64,7 +64,7 @@ model ActivitySchedule {
   start_time           DateTime?
   end_time             DateTime?
   day_of_week          String
-  activity             Activity  @relation(fields: [activity_id], references: [activity_id])
+  activity             Activity  @relation(fields: [activity_id], references: [activity_id], onDelete: Cascade)
 
   @@map("ActivitySchedules")
 }
