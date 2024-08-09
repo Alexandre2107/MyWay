@@ -7,7 +7,7 @@ import {
 } from "../../interfaces/Routine"
 
 // Get all routines
-export const getAllRoutines = async (
+export const getRoutines = async (
   req: Request,
   res: Response
 ): Promise<void> => {
