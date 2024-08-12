@@ -35,11 +35,11 @@ model User {
 model Routine {
   routine_id    Int        @id @default(autoincrement())
   user_id       Int
-  guardian_id   Int?
+  guardian_id   Int
   creation_date DateTime   @default(now())
   description   String?
   user          User       @relation("UserRoutines", fields: [user_id], references: [user_id])
-  guardian      User?      @relation("GuardianRoutines", fields: [guardian_id], references: [user_id])
+  guardian      User       @relation("GuardianRoutines", fields: [guardian_id], references: [user_id])
   activities    Activity[]
 
   @@map("Routines")
@@ -50,7 +50,7 @@ model Activity {
   routine_id    Int
   title         String
   description   String?
-  activity_type String
+  activity_task Boolean
   routine       Routine            @relation(fields: [routine_id], references: [routine_id], onDelete: Cascade)
   schedules     ActivitySchedule[]
 
@@ -58,13 +58,22 @@ model Activity {
 }
 
 model ActivitySchedule {
-  activity_schedule_id Int       @id @default(autoincrement())
+  activity_schedule_id Int         @id @default(autoincrement())
   activity_id          Int
-  has_time             Boolean   @default(true)
+  has_time             Boolean     @default(true)
   start_time           DateTime?
   end_time             DateTime?
-  day_of_week          String
-  activity             Activity  @relation(fields: [activity_id], references: [activity_id], onDelete: Cascade)
+  activity             Activity    @relation(fields: [activity_id], references: [activity_id], onDelete: Cascade)
+  days_of_week         DayOfWeek[]
 
   @@map("ActivitySchedules")
+}
+
+model DayOfWeek {
+  day_of_week_id       Int              @id @default(autoincrement())
+  activity_schedule_id Int
+  day                  String
+  activitySchedule     ActivitySchedule @relation(fields: [activity_schedule_id], references: [activity_schedule_id], onDelete: Cascade)
+
+  @@map("DaysOfWeek")
 }
