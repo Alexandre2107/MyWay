@@ -109,7 +109,7 @@ export const createRoutine = async (
 ): Promise<void> => {
   const data: CreateRoutineInput = req.body
   try {
-    const userHasRoutine = await prisma.routine.findFirst({
+    const userHasRoutine: Routine | null = await prisma.routine.findFirst({
       where: { user_id: data.user_id },
     })
     if (!userHasRoutine) {

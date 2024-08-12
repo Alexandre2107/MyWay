@@ -69,7 +69,7 @@ export const createUser = async (
 ): Promise<void> => {
   const data: CreateUserInput= req.body
   try {
-    const newUser: CreateUserInput = await prisma.user.create({
+    const newUser: User = await prisma.user.create({
       data: data,
     })
     res.status(201).json(newUser)
@@ -86,7 +86,7 @@ export const updateUser = async (
   const { user_id } = req.params
   const data: UpdateUserInput = req.body
   try {
-    const updatedUser: UpdateUserInput = await prisma.user.update({
+    const updatedUser: User = await prisma.user.update({
       where: { user_id: Number(user_id) },
       data: data,
     })
