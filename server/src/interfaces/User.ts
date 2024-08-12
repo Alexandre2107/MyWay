@@ -18,7 +18,6 @@ export interface CreateUserInput {
 }
 
 export interface UpdateUserInput {
-  user_id: number
   full_name?: string
   document?: string
   email?: string

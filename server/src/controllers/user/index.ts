@@ -67,24 +67,10 @@ export const createUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const {
-    full_name,
-    document,
-    email,
-    password,
-    type_of_user,
-    has_full_permission,
-  } = req.body
+  const data: CreateUserInput= req.body
   try {
     const newUser: CreateUserInput = await prisma.user.create({
-      data: {
-        full_name,
-        document,
-        email,
-        password,
-        type_of_user,
-        has_full_permission,
-      },
+      data: data,
     })
     res.status(201).json(newUser)
   } catch (error) {
@@ -98,25 +84,11 @@ export const updateUser = async (
   res: Response
 ): Promise<void> => {
   const { user_id } = req.params
-  const {
-    full_name,
-    document,
-    email,
-    password,
-    type_of_user,
-    has_full_permission,
-  } = req.body
+  const data: UpdateUserInput = req.body
   try {
     const updatedUser: UpdateUserInput = await prisma.user.update({
       where: { user_id: Number(user_id) },
-      data: {
-        full_name,
-        document,
-        email,
-        password,
-        type_of_user,
-        has_full_permission,
-      },
+      data: data,
     })
     res.status(200).json(updatedUser)
   } catch (error) {
