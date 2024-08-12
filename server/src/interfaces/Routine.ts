@@ -1,11 +1,9 @@
-import { User } from "./User"
-
 export interface Routine {
   routine_id: number
-  user: User
-  guardian: User | null
+  user_id: number
+  guardian_id: number
   creation_date: Date
-  description?: string | null
+  description: string | null
 }
 
 export interface CreateRoutineInput {
@@ -15,7 +13,6 @@ export interface CreateRoutineInput {
 }
 
 export interface UpdateRoutineInput {
-  routine_id: number
   user_id?: number
   guardian_id?: number
   description?: string
