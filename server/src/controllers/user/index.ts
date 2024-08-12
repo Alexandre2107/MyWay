@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { prisma } from "../../database"
-import { User } from "../../interfaces/User"
+import { User, CreateUserInput, UpdateUserInput } from "../../interfaces/User"
 
 // Get all users
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
@@ -44,7 +44,7 @@ export const getUserByEmailOrDocument = async (
 
     if (identifier.includes("@")) {
       whereClause.email = identifier
-    }else {
+    } else {
       whereClause.document = identifier
     }
 
@@ -76,7 +76,7 @@ export const createUser = async (
     has_full_permission,
   } = req.body
   try {
-    const newUser: User = await prisma.user.create({
+    const newUser: CreateUserInput = await prisma.user.create({
       data: {
         full_name,
         document,
@@ -107,7 +107,7 @@ export const updateUser = async (
     has_full_permission,
   } = req.body
   try {
-    const updatedUser: User = await prisma.user.update({
+    const updatedUser: UpdateUserInput = await prisma.user.update({
       where: { user_id: Number(user_id) },
       data: {
         full_name,
