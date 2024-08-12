@@ -1,20 +1,16 @@
-import { ActivitySchedule } from "./ActivitySchedule"
-import { Routine } from "./Routine"
-
-export interface Activity {
+export type Activity = {
   activity_id: number
-  routine: Routine
+  routine_id: number
   title: string
-  description?: string
-  activity_type: "scheduled" | "task"
-  schedules: ActivitySchedule[]
+  description: string | null
+  activity_task: boolean
 }
 
 export interface CreateActivityInput {
   routine_id: number
   title: string
   description?: string
-  activity_type: "scheduled" | "task"
+  activity_task: boolean
 }
 
 export interface UpdateActivityInput {
@@ -22,5 +18,5 @@ export interface UpdateActivityInput {
   routine_id?: number
   title?: string
   description?: string
-  activity_type?: "scheduled" | "task"
+  activity_task?: boolean
 }
