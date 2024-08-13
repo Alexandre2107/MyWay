@@ -6,14 +6,30 @@ import {
   UpdateActivityInput,
 } from "../../interfaces/Activity"
 
-// Get all activity
-export const getActivity = async (
+// Get all activities
+export const getActivities = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
     const activities: Activity[] = await prisma.activity.findMany({})
     res.status(200).json(activities)
+  } catch (error) {
+    res.status(500).json({ error: error })
+  }
+}
+
+// Get activity by ID
+export const getActivityById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { activity_id } = req.params
+    const activity: Activity | null = await prisma.activity.findUnique({
+      where: { activity_id: Number(activity_id) },
+    })
+    res.status(200).json(activity)
   } catch (error) {
     res.status(500).json({ error: error })
   }
