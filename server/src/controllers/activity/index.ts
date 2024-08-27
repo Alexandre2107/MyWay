@@ -36,16 +36,56 @@ export const getActivityById = async (
 }
 
 // Create new activity
-export const createActivity = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+// export const createActivity = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+//   const data: CreateActivityInput = req.body
+//   try {
+//     const activities: Activity = await prisma.activity.create({
+//       data: data,
+//     })
+//     res.status(200).json(activities)
+//   } catch (error) {
+//     res.status(500).json({ error: error })
+//   }
+// }
+
+export const createActivity = async (req: Request, res: Response): Promise<void> => {
   const data: CreateActivityInput = req.body
   try {
-    const activities: Activity = await prisma.activity.create({
-      data: data,
+    const activity = await prisma.activity.create({
+      data: {
+        routine_id: data.routine_id,
+        title: data.title,
+        description: data.description,
+        activity_task: data.activity_task,
+      },
     })
-    res.status(200).json(activities)
+
+    await Promise.all(
+      data.schedules.map(async (schedule) => {
+        const activitySchedule = await prisma.activitySchedule.create({
+          data: {
+            activity_id: activity.activity_id,
+            has_time: schedule.has_time,
+          },
+        })
+
+        await Promise.all(
+          schedule.days_of_week.map((dayOfWeek) => {
+            return prisma.dayOfWeek.create({
+              data: {
+                activity_schedule_id: activitySchedule.activity_schedule_id,
+                day: dayOfWeek.day,
+              },
+            })
+          })
+        )
+      })
+    )
+
+    res.status(200).json(activity)
   } catch (error) {
     res.status(500).json({ error: error })
   }

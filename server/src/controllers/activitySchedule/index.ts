@@ -14,9 +14,9 @@ export const getActivitiesSchedules = async (
   try {
     const activitiesSchedule: ActivitySchedule[] =
       await prisma.activitySchedule.findMany({})
-    res.send(200).json(activitiesSchedule)
+    res.status(200).json(activitiesSchedule)
   } catch (error) {
-    res.send(500).json({ error: error })
+    res.status(500).json({ error: error })
   }
 }
 
