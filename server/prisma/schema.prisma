@@ -60,7 +60,6 @@ model Activity {
 model ActivitySchedule {
   activity_schedule_id Int         @id @default(autoincrement())
   activity_id          Int
-  has_time             Boolean     @default(true)
   start_time           DateTime?
   end_time             DateTime?
   activity             Activity    @relation(fields: [activity_id], references: [activity_id], onDelete: Cascade)

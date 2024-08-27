@@ -49,7 +49,6 @@ async function main() {
   const activitySchedule1 = await prisma.activitySchedule.create({
     data: {
       activity_id: activity1.activity_id,
-      has_time: true,
       start_time: new Date("2024-08-13T07:00:00Z"),
       end_time: new Date("2024-08-13T07:30:00Z"),
     },

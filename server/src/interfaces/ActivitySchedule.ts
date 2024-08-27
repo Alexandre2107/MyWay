@@ -17,7 +17,6 @@ export type ActivitySchedule = {
 
 export interface CreateActivityScheduleInput {
   activity_id: number
-
   start_time?: Date
   end_time?: Date
   days_of_week: CreateDayOfWeek[]

@@ -51,7 +51,10 @@ export const getActivityById = async (
 //   }
 // }
 
-export const createActivity = async (req: Request, res: Response): Promise<void> => {
+export const createActivity = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const data: CreateActivityInput = req.body
   try {
     const activity = await prisma.activity.create({
@@ -68,7 +71,14 @@ export const createActivity = async (req: Request, res: Response): Promise<void>
         const activitySchedule = await prisma.activitySchedule.create({
           data: {
             activity_id: activity.activity_id,
-            has_time: schedule.has_time,
+            start_time:
+              data.activity_task == false && schedule.start_time
+                ? schedule.start_time
+                : null,
+            end_time:
+              data.activity_task == false && schedule.end_time
+                ? schedule.end_time
+                : null,
           },
         })
 
