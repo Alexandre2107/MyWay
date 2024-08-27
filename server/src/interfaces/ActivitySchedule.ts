@@ -24,7 +24,6 @@ export interface CreateActivityScheduleInput {
 
 export interface UpdateActivityScheduleInput {
   activity_id?: number
-  has_time?: boolean
   start_time?: Date
   end_time?: Date
 }
