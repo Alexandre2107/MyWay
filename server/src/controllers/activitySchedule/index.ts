@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { prisma } from "../../database"
+import { Activity } from "../../interfaces/Activity"
 import {
   ActivitySchedule,
   CreateActivityScheduleInput,
@@ -44,9 +45,42 @@ export const createActivitySchedule = async (
 ): Promise<void> => {
   try {
     const data: CreateActivityScheduleInput = req.body
-    const activitySchedule = prisma.activitySchedule.create({
-      data: data,
+    const activity: Activity | null = await prisma.activity.findUnique({
+      where: { activity_id: Number(data.activity_id) },
     })
+
+    if (!activity) {
+      res.status(404).json({ error: "Activity not found" })
+      return
+    }
+
+    const activitySchedule: ActivitySchedule =
+      await prisma.activitySchedule.create({
+        data: {
+          activity_id: data.activity_id,
+          start_time:
+            activity.activity_task == false && data.start_time
+              ? data.start_time
+              : null,
+          end_time:
+            activity.activity_task == false && data.end_time
+              ? data.end_time
+              : null,
+        },
+        include: {
+          days_of_week: true,
+        },
+      })
+
+    data.days_of_week.forEach(async (dayOfWeek) => {
+      await prisma.dayOfWeek.create({
+        data: {
+          activity_schedule_id: activitySchedule.activity_schedule_id,
+          day: dayOfWeek.day,
+        },
+      })
+    })
+
     res.status(200).json(activitySchedule)
   } catch (error) {
     res.status(500).json({ error: error })
