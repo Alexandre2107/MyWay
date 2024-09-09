@@ -1,6 +1,8 @@
 import { Request, Response } from "express"
 import { prisma } from "../../database"
 import { User, CreateUserInput, UpdateUserInput } from "../../interfaces/User"
+import bcrypt from "bcrypt"
+
 
 // Get all users
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
@@ -32,45 +34,20 @@ export const getUserById = async (
   }
 }
 
-// Get user by Email or Document
-export const getUserByEmailOrDocument = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const { identifier } = req.params
-
-  try {
-    let whereClause: any = {}
-
-    if (identifier.includes("@")) {
-      whereClause.email = identifier
-    } else {
-      whereClause.document = identifier
-    }
-
-    const user: User | null = await prisma.user.findUnique({
-      where: whereClause,
-    })
-
-    if (user) {
-      res.status(200).json(user)
-    } else {
-      res.status(404).json({ message: "User not found" })
-    }
-  } catch (error) {
-    res.status(500).json({ error: error })
-  }
-}
-
 // Create new user
 export const createUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const data: CreateUserInput= req.body
+  const data: CreateUserInput = req.body
+  const saltRounds = 10
   try {
-    const newUser: User = await prisma.user.create({
-      data: data,
+    const hashedPassword = await bcrypt.hash(data.password, saltRounds)
+    const newUser = await prisma.user.create({
+      data: {
+        ...data,
+        password: hashedPassword,
+      },
     })
     res.status(201).json(newUser)
   } catch (error) {
