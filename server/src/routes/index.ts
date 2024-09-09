@@ -10,7 +10,8 @@ import { login } from "../controllers/auth"
 const router = express.Router()
 
 router.post("/login", login)
-router.use("/user", authenticate, userRouter)
+
+router.use("/user", userRouter)
 router.use("/routine", authenticate, routineRouter)
 router.use("/activity", authenticate, activityRouter)
 router.use("/activityschedule", authenticate, activityScheduleRouter)
