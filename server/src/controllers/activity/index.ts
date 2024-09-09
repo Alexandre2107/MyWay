@@ -35,6 +35,22 @@ export const getActivityById = async (
   }
 }
 
+// Get activities by Routine_id
+export const getActivitiesByRoutineId = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { routine_id } = req.params
+    const activities: Activity[] = await prisma.activity.findMany({
+      where: { routine_id: Number(routine_id) },
+    })
+    res.status(200).json(activities)
+  } catch (error) {
+    res.status(500).json({ error: error })
+  }
+}
+
 // Create new activity
 // export const createActivity = async (
 //   req: Request,
