@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import { prisma } from "../../database"
 import { User } from "../../interfaces/User"
-import { invalidTokens } from "../../models/invalidTokenModel"
 import { generateToken } from "../../utils/jwtUtils"
 import bcrypt from "bcrypt"
 
@@ -31,14 +30,4 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     res.status(500).json({ error: error })
   }
-}
-
-export const logout = async (req: Request, res: Response) => {
-  const authHeader = req.headers.authorization
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Token não fornecido." })
-  }
-  const token = authHeader.split(" ")[1]
-  invalidTokens.push(token)
-  res.status(200).json({ message: "Logout realizado com sucesso." })
 }

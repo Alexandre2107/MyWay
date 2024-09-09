@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express"
 import jwt from "jsonwebtoken"
-import { invalidTokens } from "../models/invalidTokenModel"
 
 const verifyToken = (token: string) => {
   const secret = process.env.JWT_SECRET || "secret"
@@ -28,13 +27,9 @@ export const authenticate = async (
 
   const token = authHeader.split(" ")[1]
 
-  if (invalidTokens.includes(token)) {
-    return res.status(401).json({ message: "Token inválido." })
-  }
-
   try {
     const decoded = await verifyToken(token)
-    ;(req as any).user = decoded // Adiciona o usuário decodificado à requisição
+    ;(req as any).user = decoded
     next()
   } catch (error) {
     res.status(401).json({ message: "Token inválido." })
