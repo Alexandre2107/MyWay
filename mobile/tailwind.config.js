@@ -1,19 +1,9 @@
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.js
+
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  presets: [require("nativewind/preset")],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
-    extend: {
-      colors: {
-        dark: "#09090a",
-      },
-      fontFamily: {
-        regular: "Inter_400Regular",
-        semibold: "Inter_600SemiBold",
-        bold: "Inter_700Bold",
-        extrabold: "Inter_800ExtraBold",
-      },
-    },
+    extend: {},
   },
   plugins: [],
-};
+}
